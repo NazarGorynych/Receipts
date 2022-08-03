@@ -1,7 +1,7 @@
 # Receipts
   **Test task where users can modify and order items based on their personal preferences in common for all users table of receipts.** 
 
- _- The project has implemented ManyToMany relationship between individual users and items in the receipts table._ 
+ _-The project has following tables: _ 
 
  _- The aim of this whole thing is that of using RAW SQL querries and implement "Drag and drop" frontend action for the end customer of the web-page._
  
@@ -9,7 +9,7 @@
 
  To install the project, please run following commands in the terminal:
 ```
-1. git clone https://github.com/NazarGorynych/Receipts.git
+1. git clone https://github.com/NazarGorynych/receipts.git
 2. pip install virtualenv
 3. virtualenv env
 4. source env/bin/active
