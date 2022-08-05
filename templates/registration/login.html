@@ -1,6 +1,4 @@
 {% extends 'receipts_home/layouts/main-layout.html' %}
-{% load widget_tweaks %}
-{% load widget_tweaks %}
 {% block title %}
     Login
 {% endblock %}
@@ -24,14 +22,14 @@
                                 <br>
                                 <tr>{% render_field form.password placeholder='Password' class='form-control' %}
                                 </tr>
-                                <tr>{% if form.error_messages %}
-                                    <br>
-                                    <div class="alert alert-danger form-group" role="alert">
-                                        <p>Please enter a correct username and password. Note that both fields may be
-                                            case-sensitive</p>
-                                    </div>
-                                {% endif %}
-
+                                <tr>
+                                    {% if form.errors %}
+                                        <br>
+                                        <div class="alert alert-danger form-group" role="alert">
+                                            <p>Please enter a correct username and password. Note that both fields may
+                                                be case-sensitive</p>
+                                        </div>
+                                    {% endif %}
                                 </tr>
                             </table>
 
