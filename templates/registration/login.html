@@ -1,4 +1,6 @@
 {% extends 'receipts_home/layouts/main-layout.html' %}
+{% load widget_tweaks %}
+{% load widget_tweaks %}
 {% block title %}
     Login
 {% endblock %}
@@ -11,6 +13,7 @@
             <div class="card" style="border-radius: 1rem; border-color: #c7c7c7; margin: 10%; width: 35%;">
                 <div class="d-flex justify-content-center" style="margin: 10%;">
                     <div class="col-8" style=" flex: auto; justify-content: center">
+
                         <form method="post" action="{% url 'login' %}">
                             <h2 style="text-align: center" class="fw-light">Login</h2>
                             {% csrf_token %}
@@ -21,7 +24,17 @@
                                 <br>
                                 <tr>{% render_field form.password placeholder='Password' class='form-control' %}
                                 </tr>
+                                <tr>{% if form.error_messages %}
+                                    <br>
+                                    <div class="alert alert-danger form-group" role="alert">
+                                        <p>Please enter a correct username and password. Note that both fields may be
+                                            case-sensitive</p>
+                                    </div>
+                                {% endif %}
+
+                                </tr>
                             </table>
+
                             <input type="hidden" name="next" value="{{ next }}">
 
                             <div style="display: flex; justify-content: flex-end">

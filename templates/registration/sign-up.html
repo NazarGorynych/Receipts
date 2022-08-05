@@ -26,13 +26,18 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Enter your username</label>
                                 {% render_field form.username placeholder='Username' class='form-control' %}
-
                                 <small class="form-text text-muted" style="margin: 10px">Required. 150 characters or
                                     fewer. Letters, digits and @/./+/-/_ only.</small>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Enter your password</label>
                                 {% render_field form.password1 placeholder='Password' class='form-control' %}
+                                {% if form.password1.errors %}
+                                    <br>
+                                    <div class="alert alert-danger form-group" role="alert">{{ form.password1.errors }}
+                                    </div>
+
+                                {% endif %}
                                 <br>
                                 <ul class="form-text text-muted">
                                     <li>Your password can’t be too similar to your other personal information.</li>
@@ -40,6 +45,7 @@
                                     <li>Your password can’t be a commonly used password.</li>
                                     <li>Your password can’t be entirely numeric.</li>
                                 </ul>
+
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Confirm password</label>
@@ -47,11 +53,18 @@
                                 <small class="form-text text-muted" style="margin: 10px">Enter the same password for
                                     verification</small>
                                 <br>
+                                {% if form.password2.errors %}
+                                    <br>
+                                    <div class="alert alert-danger form-group" role="alert">{{ form.password2.errors }}
+                                    </div>
+                                {% endif %}
+
                                 <div style="display: flex; justify-content: flex-end">
                                     <button type="submit" class="btn btn-primary" style="font-size: medium;">Submit
                                     </button>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                 </div>
