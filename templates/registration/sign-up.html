@@ -1,0 +1,61 @@
+{% extends 'receipts_home/layouts/main-layout.html' %}
+{% block title %}
+    Sign Up
+{% endblock %}
+{% load widget_tweaks %}
+
+{% block body %}
+
+    <div class="main align-items-center">
+        {% if messages %}
+            <div class="alert alert-warning">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="card" style="border-radius: 1rem; border-color: #c7c7c7; margin: 5%; width: 35%;">
+                <div class="d-flex justify-content-center" style="margin: 10%;">
+                    <div class="col-8" style=" flex: auto; justify-content: center">
+                        <form method="post">
+                            <h2 style="text-align: center" class="fw-light">Sign Up</h2>
+                            {% csrf_token %}
+                            {#                            {{ form.as_p }}#}
+                            <br>
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Enter your username</label>
+                                {% render_field form.username placeholder='Username' class='form-control' %}
+
+                                <small class="form-text text-muted" style="margin: 10px">Required. 150 characters or
+                                    fewer. Letters, digits and @/./+/-/_ only.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Enter your password</label>
+                                {% render_field form.password1 placeholder='Password' class='form-control' %}
+                                <br>
+                                <ul class="form-text text-muted">
+                                    <li>Your password can’t be too similar to your other personal information.</li>
+                                    <li>Your password must contain at least 8 characters.</li>
+                                    <li>Your password can’t be a commonly used password.</li>
+                                    <li>Your password can’t be entirely numeric.</li>
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Confirm password</label>
+                                {% render_field form.password2 placeholder='Repeat password' class='form-control' %}
+                                <small class="form-text text-muted" style="margin: 10px">Enter the same password for
+                                    verification</small>
+                                <br>
+                                <div style="display: flex; justify-content: flex-end">
+                                    <button type="submit" class="btn btn-primary" style="font-size: medium;">Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

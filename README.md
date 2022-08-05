@@ -1,7 +1,5 @@
 # Receipts
-  **Test task where users can modify and order items based on their personal preferences in common for all users table of receipts.** 
-
- _- The project has implemented ManyToMany relationship between individual users and items in the receipts table._ 
+  **Test task where users can modify and order items based on their personal preferences in common for all users table of receipts.**  
 
  _- The aim of this whole thing is that of using RAW SQL queries and implement "Drag and drop" frontend action for the end customer of the web-page._
  

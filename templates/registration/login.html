@@ -1,0 +1,41 @@
+{% extends 'receipts_home/layouts/main-layout.html' %}
+{% block title %}
+    Login
+{% endblock %}
+{% load widget_tweaks %}
+
+{% block body %}
+
+    <div class="main align-items-center">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="card" style="border-radius: 1rem; border-color: #c7c7c7; margin: 10%; width: 35%;">
+                <div class="d-flex justify-content-center" style="margin: 10%;">
+                    <div class="col-8" style=" flex: auto; justify-content: center">
+                        <form method="post" action="{% url 'login' %}">
+                            <h2 style="text-align: center" class="fw-light">Login</h2>
+                            {% csrf_token %}
+                            <br>
+                            <table class="table table-borderless">
+                                <tr>{% render_field form.username placeholder='Username' class='form-control' %}
+                                </tr>
+                                <br>
+                                <tr>{% render_field form.password placeholder='Password' class='form-control' %}
+                                </tr>
+                            </table>
+                            <input type="hidden" name="next" value="{{ next }}">
+
+                            <div style="display: flex; justify-content: flex-end">
+                                <button type="submit" class="btn btn-primary" style="font-size: medium;">Login</button>
+                            </div>
+                        </form>
+                        <br/>
+                        <div style="display: flex; justify-content: flex-start; margin-left: 25px">
+                            <p> Don't have an account yet? You can create one <a aria-current="page"
+                                                                                 href="{% url 'signup' %}">here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
