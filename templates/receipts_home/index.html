@@ -5,5 +5,41 @@
 {% load widget_tweaks %}
 
 {% block body %}
+    <div class="container ">
+        <div class="container px-2 " style="width: 50%; float: left">
+            <h4> Users </h4>
+            <div class="col column bg-secondary">
+                <div class="user-group-item">
+                    Alex
+                </div>
+                <div class="user-group-item">
+                    Andrii
+                </div>
+                <div class="user-group-item">
+                    Nazarii
+                </div>
+            </div>
+        </div>
+        <div class="container px-2" style="width: 50%; float: right">
+            <h4> Receipts </h4>
+            <div class="col column bg-secondary" id="listToOrder">
+                <div class="list-group-item">
+                    FirstReceipt
+                </div>
+                <div class="list-group-item">
+                    Second
+                </div>
+                <div class="list-group-item">
+                    FirstReceipt
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"
+            integrity="sha512-zYXldzJsDrNKV+odAwFYiDXV2Cy37cwizT+NkuiPGsa9X1dOz04eHvUWVuxaJ299GvcJT31ug2zO4itXBjFx4w=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        Sortable.create(listToOrder, { /* options */});
 
+    </script>
 {% endblock %}
