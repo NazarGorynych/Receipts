@@ -9,28 +9,21 @@
         <div class="container px-2 " style="width: 50%; float: left">
             <h4> Users </h4>
             <div class="col column bg-secondary">
-                <div class="user-group-item">
-                    Alex
-                </div>
-                <div class="user-group-item">
-                    Andrii
-                </div>
-                <div class="user-group-item">
-                    Nazarii
-                </div>
+                {% for user in users %}
+                    <div class="user-group-item">
+                        {{ user.username }}
+                    </div>
+                {% endfor %}
             </div>
         </div>
         <div class="container px-2" style="width: 50%; float: right">
             <h4> Receipts </h4>
             <div class="col column bg-secondary" id="listToOrder">
-                <div class="list-group-item">
-                    FirstReceipt
-                </div>
-                <div class="list-group-item">
-                    Second
-                </div>
-                <div class="list-group-item">
-                    FirstReceipt
+                {% for item in receipts %}
+                    <div class="list-group-item">
+                        {{ item.title }}
+                    </div>
+                {% endfor %}
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@ from receipts.models import Receipt, User
 
 class OrderingPreference(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    receipts = models.ManyToManyField(Receipt, blank=True)
+    receipts = models.ManyToManyField(Receipt, blank=True, related_name='receipts')
 
     def save(self, *args, **kwargs):
         super(OrderingPreference, self).save(*args, **kwargs)
