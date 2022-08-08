@@ -15,7 +15,7 @@ class IndexView(TemplateView, LoginRequiredMixin):
         context_data = super(IndexView, self).get_context_data()
         context_data['users'] = User.objects.all()
         preference = OrderingPreference.objects.get(user=get_current_user())
-        context_data['receipts'] = preference.receipts.all()
+        context_data['receipts'] = preference.retrieve_receipts_by_id()
         return context_data
 
 
