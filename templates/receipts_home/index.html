@@ -1,10 +1,28 @@
 {% extends 'receipts_home/layouts/main-layout.html' %}
+
 {% block title %}
     Index
 {% endblock %}
 {% load widget_tweaks %}
 
 {% block body %}
+    {#        {% csrf_token %}#}
+    {#        <form class="sortable list-group" hx-trigger="end" hx-post="{% url 'sort' %}">#}
+    {#            <div class="htmx-indicator">Updating...</div>#}
+    {#            {% for receipt in receipts %}#}
+    {#            <div>#}
+    {#                <input type="hidden" name="receipt_order" value="{{ receipt.pk }}" />#}
+    {#                <li class="list-group-item d-flex justify-content-between align-items-center">#}
+    {#                    <a>#}
+    {#                        {{ receipt.pk }} {{ receipt.title }}#}
+    {#                    </a>#}
+    {#                </li>#}
+    {#            </div>#}
+    {#        {% endfor %}#}
+    {#        </form>#}
+
+
+
     <div class="container ">
         <div class="container px-2 " style="width: 50%; float: left">
             <h4> Users </h4>
@@ -16,23 +34,28 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="container px-2" style="width: 50%; float: right">
-            <h4> Receipts </h4>
-            <div class="col column bg-secondary" id="listToOrder">
-                {% for item in receipts %}
-                    <div class="list-group-item">
-                        {{ item.title }}
-                    </div>
-                {% endfor %}
-                </div>
+        <div class="container px-2 " style="width: 50%; float: left">
+            <h4> Users </h4>
+            <div class="col column bg-secondary">
+                {% include 'receipts_home/includes/receipts.html'%}
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"
-            integrity="sha512-zYXldzJsDrNKV+odAwFYiDXV2Cy37cwizT+NkuiPGsa9X1dOz04eHvUWVuxaJ299GvcJT31ug2zO4itXBjFx4w=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        Sortable.create(listToOrder, { /* options */});
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
+
+        htmx.onLoad(function (content) {
+            var sortables = content.querySelectorAll(".sortable");
+            for (var i = 0; i < sortables.length; i++) {
+                var sortable = sortables[i];
+                new Sortable(sortable, {
+                    animation: 150,
+                    ghostClass: 'blue-background-class'
+                });
+            }
+        })
 
     </script>
 {% endblock %}

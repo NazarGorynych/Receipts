@@ -1,0 +1,16 @@
+{% csrf_token %}
+<div id="receipt-list">
+    <form class="sortable list-group" hx-trigger="end" hx-post="{% url 'sort' %}" hx-target="#receipt-list">
+        <div class="htmx-indicator">Updating...</div>
+        {% for receipt in receipts %}
+            <div>
+                <input type="hidden" name="receipt_order" value="{{ receipt.pk }}"/>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a hx-target="#film-list">
+                        {{ receipt.pk }} {{ receipt.title }}
+                    </a>
+                </li>
+            </div>
+        {% endfor %}
+    </form>
+</div>
