@@ -3,30 +3,25 @@ from receipts.models import Receipt, User
 from django.contrib.postgres.fields import ArrayField
 
 
-# Create your models here.
-
 class OrderingPreference(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     receipts = ArrayField(models.IntegerField(), null=True, blank=True)
 
-    def create_initial_receipts(self):
-        '''
-         Create temporary Python list to append IDs of receipts,
-         and then store it as Integer in an Array in PostgresDB
-         Called only on instance initialization
-        '''
-        all_receipts = Receipt.objects.all()
-        temp_lst = []
-        for receipt in all_receipts:
-            temp_lst.append(receipt.id)
-            self.receipts = temp_lst
-        return self.receipts
+    def update_receipts(self):
+        ''' Updates current ordering of receipts by adding missing receipts to the list of data'''
+        if not self.receipts:
+            self.receipts = []
+        # comprehends which values do not match and adds them to a new list
+        difference = [value.id for value in Receipt.get_all_receipts() if value.id not in self.receipts]
+        self.receipts += difference
+
 
     def retrieve_receipts_by_id(self):
         '''
         Returns list of receipt models from a list of associated IDs,
         if empty returns an empty list
         '''
+        self.update_receipts()
         receipts_models = []
         if self.receipts:
             for obj_id in self.receipts:
@@ -35,6 +30,5 @@ class OrderingPreference(models.Model):
         return receipts_models
 
     def save(self, *args, **kwargs):
-        if not self.receipts:
-            self.create_initial_receipts()
+        self.update_receipts()
         super(OrderingPreference, self).save(*args, **kwargs)

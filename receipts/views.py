@@ -23,15 +23,17 @@ class IndexView(TemplateView, LoginRequiredMixin):
         context_data['receipts'] = preference.retrieve_receipts_by_id()
         return context_data
 
+
 def sort(request):
     '''
      Reassigns ordered by SortableJS receipts to OrderingPreference,
      and swaps form where it was sorted with the new one to continue the cycle
      '''
 
-    ordered_receipts = request.POST.getlist('receipt_order')
+    str_ordered_receipts = request.POST.getlist('receipt_order')
+    int_ordered_receipts = [int(i) for i in str_ordered_receipts]  # convert str_ordered_receipts to list of integers
     preference = OrderingPreference.objects.get(user_id=get_current_user())
-    preference.receipts = ordered_receipts
+    preference.receipts = int_ordered_receipts
     preference.save()
     receipts = preference.retrieve_receipts_by_id()
     return render(request, 'receipts_home/includes/receipts.html', {'receipts': receipts})
