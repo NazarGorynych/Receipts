@@ -10,11 +10,11 @@
                         {{ receipt.pk }} {{ receipt.title }}
                     </a>
                     {% if user.is_staff %}
-{#                        <span class="badge badge-danger badge-pill"#}
-{#                              style="cursor: pointer;"#}
-    {#                          hx-delete="{% url 'delete-film' film.pk %}"#}
-{#                              hx-target="#film-list"#}
-{#                              hx-confirm="Are you sure you wish to delete?">x</span>#}
+                        <span class="badge badge-danger badge-pill"
+                              style="cursor: pointer;"
+                              hx-delete="{% url 'delete-receipt' receipt.pk %}"
+                              hx-target="#receipt-list"
+                              hx-confirm="Are you sure you wish to delete?">x</span>
                     {% endif %}
                 </li>
 

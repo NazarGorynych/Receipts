@@ -57,6 +57,13 @@ def add_receipt(request):
     return render(request, 'receipts_home/includes/receipt-form.html', {'form': form})
 
 
+def delete_receipt(request, pk):
+    form = ReceiptForm()
+    Receipt.objects.get(pk=pk).delete()
+    preference = OrderingPreference.objects.get(user_id=get_current_user())
+    receipts = preference.retrieve_receipts_by_id()
+    return render(request, 'receipts_home/includes/receipts.html', {'form': form, 'receipts': receipts})
+
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
