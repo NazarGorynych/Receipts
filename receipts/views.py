@@ -1,6 +1,7 @@
-from django.views.generic import CreateView, TemplateView, FormView
+from django.views.generic import CreateView, TemplateView, UpdateView
 from django.urls import reverse_lazy, reverse
-from django.shortcuts import redirect
+from django.http import QueryDict
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserCreationForm, ReceiptForm
@@ -10,6 +11,7 @@ from .middleware import get_current_user
 from django.shortcuts import render
 from django.views.generic.edit import FormMixin
 from django.http import HttpResponse
+import json
 
 
 class IndexView(TemplateView, LoginRequiredMixin, FormMixin):
@@ -63,6 +65,26 @@ def delete_receipt(request, pk):
     preference = OrderingPreference.objects.get(user_id=get_current_user())
     receipts = preference.retrieve_receipts_by_id()
     return render(request, 'receipts_home/includes/receipts.html', {'form': form, 'receipts': receipts})
+
+
+def update_receipt(request, pk):
+    preference = OrderingPreference.objects.get(user_id=get_current_user())
+    receipts = preference.retrieve_receipts_by_id()
+    receipt = get_object_or_404(Receipt, pk=pk)
+    if request.method == "POST":
+        form = ReceiptForm(request.POST or None, instance=receipt)
+        if form.is_valid():
+            form.save()
+            form = ReceiptForm()
+            preference = OrderingPreference.objects.get(user_id=get_current_user())
+            receipts = preference.retrieve_receipts_by_id()
+            return render(request, 'receipts_home/includes/receipts.html', {'form': form, 'receipts': receipts})
+    else:
+        form = ReceiptForm(instance=receipt)
+    return render(request, 'receipts_home/includes/update-receipt.html', {
+        'form': form,
+        'receipt': receipt,
+    })
 
 
 class SignUpView(CreateView):
