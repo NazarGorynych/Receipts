@@ -1,0 +1,11 @@
+{% load widget_tweaks %}
+{% csrf_token %}
+<form hx-post="{% url 'receipt-form' %}" hx-target="#receipt-list" class="sortable list-group">
+    <div class="modal-body">
+        {% render_field form.title placeholder='Add your receipt here' class='form-control mt-1' %}
+        <div style="display: flex; justify-content: flex-end">
+            <button type="submit" class="btn btn-secondary mt-1 bg-light text-dark" style="font-size: medium;">Submit
+            </button>
+        </div>
+    </div>
+</form>

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import SignUpView, IndexView, sort
+from .views import SignUpView, IndexView, sort, add_receipt
 
 urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
@@ -8,6 +8,7 @@ urlpatterns = [
 
 htmx_urlpatterns = [
     path('sort/', sort, name='sort'),
+    path('receipt-form/', add_receipt, name='receipt-form')
 ]
 
 urlpatterns += htmx_urlpatterns

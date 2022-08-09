@@ -8,12 +8,20 @@ class OrderingPreference(models.Model):
     receipts = ArrayField(models.IntegerField(), null=True, blank=True)
 
     def update_receipts(self):
-        ''' Updates current ordering of receipts by adding missing receipts to the list of data'''
+        '''
+         Updates current ordering of receipts by adding missing receipts to the list of data,
+        or removing deleted receipts from ordering
+        '''
+        all_receipts = Receipt.get_all_receipts()
         if not self.receipts:
             self.receipts = []
-        # comprehends which values do not match and adds them to a new list
-        difference = [value.id for value in Receipt.get_all_receipts() if value.id not in self.receipts]
-        self.receipts += difference
+        if len(self.receipts) > len(all_receipts):
+            # comprehends which values match and creates list from cross-section
+            self.receipts = [value.id for value in all_receipts if value.id in self.receipts]
+        else:
+            # comprehends which values do not match and adds them to a new list
+            difference = [value.id for value in all_receipts if value.id not in self.receipts]
+            self.receipts += difference
 
 
     def retrieve_receipts_by_id(self):
@@ -21,7 +29,7 @@ class OrderingPreference(models.Model):
         Returns list of receipt models from a list of associated IDs,
         if empty returns an empty list
         '''
-        self.update_receipts()
+        self.save()
         receipts_models = []
         if self.receipts:
             for obj_id in self.receipts:

@@ -19,12 +19,13 @@
             </div>
         </div>
         <div class="container px-2 " style="width: 50%; float: left">
-            <h4> Users </h4>
+            <h4> Receipts </h4>
             <div class="col column bg-secondary">
                 {% include 'receipts_home/includes/receipts.html' %}
             </div>
         </div>
     </div>
+
     <script>
         document.body.addEventListener('htmx:configRequest', (event) => {
             event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
