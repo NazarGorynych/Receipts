@@ -1,6 +1,6 @@
 from django.views.generic import CreateView, TemplateView, UpdateView
 from django.urls import reverse_lazy, reverse
-from django.http import QueryDict
+from django.http import QueryDict, HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,7 +11,7 @@ from .middleware import get_current_user
 from django.shortcuts import render
 from django.views.generic.edit import FormMixin
 from django.http import HttpResponse
-import json
+from django.views.decorators.http import require_http_methods
 
 
 class IndexView(TemplateView, LoginRequiredMixin, FormMixin):
@@ -35,13 +35,17 @@ def sort(request):
      Reassigns ordered by SortableJS receipts to OrderingPreference,
      and swaps form where it was sorted with the new one to continue the cycle
      '''
-    form = ReceiptForm()
+    preference = OrderingPreference.objects.get(user_id=get_current_user())
     str_ordered_receipts = request.POST.getlist('receipt_order')
     int_ordered_receipts = [int(i) for i in str_ordered_receipts]  # convert str_ordered_receipts to list of integers
-    preference = OrderingPreference.objects.get(user_id=get_current_user())
     preference.receipts = int_ordered_receipts
     preference.save()
+    return redirect('include-receipts')
+
+def include_receipts(request):
+    preference = OrderingPreference.objects.get(user_id=get_current_user())
     receipts = preference.retrieve_receipts_by_id()
+    form = ReceiptForm()
     return render(request, 'receipts_home/includes/receipts.html', {'form': form, 'receipts': receipts})
 
 
@@ -50,13 +54,8 @@ def add_receipt(request):
         form = ReceiptForm(request.POST)
         if form.is_valid():
             form.save()
-            form = ReceiptForm()
-            preference = OrderingPreference.objects.get(user_id=get_current_user())
-            receipts = preference.retrieve_receipts_by_id()
-            return render(request, 'receipts_home/includes/receipts.html', {'form': form, 'receipts': receipts})
-    else:
-        form = ReceiptForm()
-    return render(request, 'receipts_home/includes/receipt-form.html', {'form': form})
+            return redirect('include-receipts')
+
 
 
 def delete_receipt(request, pk):
@@ -68,23 +67,18 @@ def delete_receipt(request, pk):
 
 
 def update_receipt(request, pk):
-    preference = OrderingPreference.objects.get(user_id=get_current_user())
-    receipts = preference.retrieve_receipts_by_id()
     receipt = get_object_or_404(Receipt, pk=pk)
     if request.method == "POST":
         form = ReceiptForm(request.POST or None, instance=receipt)
         if form.is_valid():
             form.save()
-            form = ReceiptForm()
-            preference = OrderingPreference.objects.get(user_id=get_current_user())
-            receipts = preference.retrieve_receipts_by_id()
-            return render(request, 'receipts_home/includes/receipts.html', {'form': form, 'receipts': receipts})
+            return redirect('include-receipts')
     else:
         form = ReceiptForm(instance=receipt)
-    return render(request, 'receipts_home/includes/update-receipt.html', {
-        'form': form,
-        'receipt': receipt,
-    })
+        return render(request, 'receipts_home/includes/update-receipt.html', {
+            'form': form,
+            'receipt': receipt,
+        })
 
 
 class SignUpView(CreateView):

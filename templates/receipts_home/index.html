@@ -7,10 +7,12 @@
 
 {% block body %}
 
-    <div class="container ">
+    <div class="container " id="main-container" style="max-height: 740px">
+        <div id="modals-here">
+        </div>
         <div class="container px-2 " style="width: 50%; float: left">
             <h4> Users </h4>
-            <div class="col column bg-secondary">
+            <div class="col column  overflow-auto" style="max-height: 740px">
                 {% for user in users %}
                     <div class="user-group-item">
                         {{ user.username }}
@@ -18,13 +20,13 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="container px-2 " style="width: 50%; float: left">
+        <div class="container px-2 " style="width: 50%; float: left;">
             <h4> Receipts </h4>
-            <div class="col column bg-secondary">
+            <div class="col column card" style="height: 740px">
                 {% include 'receipts_home/includes/receipts.html' %}
-            </div>
-        <div id="modals-here">
 
+                {% include 'receipts_home/includes/receipt-form.html' %}
+            </div>
         </div>
     </div>
 
@@ -46,16 +48,13 @@
 
         function closeModal() {
             var container = document.getElementById("modals-here")
+            var proxyContainer = document.getElementById("receipt-list")
             var backdrop = document.getElementById("modal-backdrop")
             var modal = document.getElementById("modal")
+            proxyContainer.removeChild(backdrop)
 
             modal.classList.remove("show")
             backdrop.classList.remove("show")
-
-            setTimeout(function () {
-                container.removeChild(backdrop)
-                container.removeChild(modal)
-            }, 200)
         }
 
     </script>

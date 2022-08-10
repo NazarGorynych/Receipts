@@ -7,6 +7,9 @@ body {
   font-family: 'Raleway', sans-serif;
   counter-reset: section;
 }
+.sized {
+    width: 50%;
+}
 
 #btn-login {
   margin-left: auto;

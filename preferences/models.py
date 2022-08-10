@@ -17,7 +17,7 @@ class OrderingPreference(models.Model):
             self.receipts = []
         if len(self.receipts) > len(all_receipts):
             # comprehends which values match and creates list from cross-section
-            self.receipts = [value.id for value in all_receipts if value.id in self.receipts]
+            self.receipts = [value for value in self.receipts if value in all_receipts.values_list('id', flat=True)]
         else:
             # comprehends which values do not match and adds them to a new list
             difference = [value.id for value in all_receipts if value.id not in self.receipts]
