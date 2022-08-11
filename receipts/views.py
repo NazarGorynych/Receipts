@@ -1,24 +1,22 @@
-from django.views.generic import CreateView, TemplateView, UpdateView
-from django.urls import reverse_lazy, reverse
-from django.http import QueryDict, HttpResponseRedirect
-from django.shortcuts import redirect, get_object_or_404
-from django.contrib import messages
+from django.views.generic import CreateView, TemplateView
+
+from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import UserCreationForm, ReceiptForm
+
+from django.urls import reverse_lazy
+from django.shortcuts import redirect, get_object_or_404, render
+
 from preferences.models import OrderingPreference
 from .models import Receipt, User
+from .forms import UserCreationForm, ReceiptForm
+
 from .middleware import get_current_user
-from django.shortcuts import render
-from django.views.generic.edit import FormMixin
-from django.http import HttpResponse
-from django.views.decorators.http import require_http_methods
 
 
-class IndexView(TemplateView, LoginRequiredMixin, FormMixin):
+class IndexView(LoginRequiredMixin, FormMixin, TemplateView):
     template_name = 'receipts_home/index.html'
     form_class = ReceiptForm
-
-    # TO DO LOGIN REQUIRED
+    login_url = '/login'
 
     def get_context_data(self, **kwargs):
         preference = OrderingPreference.objects.get(user=get_current_user())
@@ -42,7 +40,9 @@ def sort(request):
     preference.save()
     return redirect('include-receipts')
 
+
 def include_receipts(request):
+    ''' Include receipts view, used by other views to get dynamic update on receipts in the sortable table '''
     preference = OrderingPreference.objects.get(user_id=get_current_user())
     receipts = preference.retrieve_receipts_by_id()
     form = ReceiptForm()
@@ -57,16 +57,16 @@ def add_receipt(request):
             return redirect('include-receipts')
 
 
-
 def delete_receipt(request, pk):
-    form = ReceiptForm()
     Receipt.objects.get(pk=pk).delete()
-    preference = OrderingPreference.objects.get(user_id=get_current_user())
-    receipts = preference.retrieve_receipts_by_id()
-    return render(request, 'receipts_home/includes/receipts.html', {'form': form, 'receipts': receipts})
+    return redirect('include-receipts')
 
 
 def update_receipt(request, pk):
+    '''
+     Updates receipt based on new data,
+     if GET, returns update form for receipt
+     '''
     receipt = get_object_or_404(Receipt, pk=pk)
     if request.method == "POST":
         form = ReceiptForm(request.POST or None, instance=receipt)
@@ -82,6 +82,10 @@ def update_receipt(request, pk):
 
 
 class SignUpView(CreateView):
+    '''
+    Sign up view for user, that creates associated with user preference object
+     and fills it with unordered all receipts available
+     '''
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'registration/sign-up.html'

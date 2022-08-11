@@ -8,7 +8,7 @@ urlpatterns = [
 
 htmx_urlpatterns = [
     path('sort/', sort, name='sort'),
-    path('receipt-form/', add_receipt, name='receipt-form'),
+    path('add-receipt/', add_receipt, name='add-receipt'),
     path('delete-receipt/<int:pk>/', delete_receipt, name='delete-receipt'),
     path('update-receipt/<int:pk>/', update_receipt, name='update-receipt'),
     path('include-receipts/', include_receipts, name='include-receipts')
