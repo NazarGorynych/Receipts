@@ -12,15 +12,15 @@ class OrderingPreference(models.Model):
          Updates current ordering of receipts by adding missing receipts to the list of data,
         or removing deleted receipts from ordering
         '''
-        all_receipts = Receipt.get_all_receipts()
+        all_receipts_ids = Receipt.get_all_receipts_ids()
         if not self.receipts:
             self.receipts = []
-        if len(self.receipts) > len(all_receipts):
+        if len(self.receipts) > len(all_receipts_ids):
             # comprehends which values match and creates list from cross-section
-            self.receipts = [value for value in self.receipts if value in all_receipts.values_list('id', flat=True)]
+            self.receipts = [value for value in self.receipts if value in all_receipts_ids]
         else:
             # comprehends which values do not match and adds them to a new list
-            difference = [value.id for value in all_receipts if value.id not in self.receipts]
+            difference = [value for value in all_receipts_ids if value not in self.receipts]
             self.receipts += difference
 
 
@@ -32,9 +32,7 @@ class OrderingPreference(models.Model):
         self.save()
         receipts_models = []
         if self.receipts:
-            for obj_id in self.receipts:
-                data = Receipt.objects.get(pk=obj_id)  # get an object to append to the list of models
-                receipts_models.append(data)
+            receipts_models = [Receipt.objects.get(pk=obj_id) for obj_id in self.receipts]
         return receipts_models
 
     def save(self, *args, **kwargs):

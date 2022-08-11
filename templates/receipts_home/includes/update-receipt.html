@@ -2,29 +2,24 @@
 <div id="modal-backdrop" class="modal-backdrop fade show" style="display:block;"></div>
 {% csrf_token %}
 
-<form hx-post="{% url 'update-receipt' receipt.pk %}">
+<form hx-post="{% url 'update-receipt' receipt.pk %}" onsubmit="closeModal()">
     <div id="modal" class="modal fade show" tabindex="-1" style="display:block;">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header ">
                     <h5 class="modal-title" style="margin-left: 50px">Title&nbsp;&#8212;&nbsp;{{ receipt.title }}</h5>
-
                 <span><button type="button" class="badge badge-danger badge-pill" onclick="closeModal()"
                                               data-bs-dismiss="modal" hx-target="#receipt-list"
                                               hx-get="{% url 'include-receipts' %}">X</button>
                 </span>
                 </div>
                 <div class="modal-body">
-                    {% render_field form.title placeholder='Enter new title' class='form-control' %}
+                    {% render_field form.title placeholder='Enter new title' class='form-control'%}
                 </div>
-                {% if form.title.errors %}
-                    <br>
-                    <div class="alert alert-danger form-group" role="alert">{{ form.title.errors }}
-                    </div>
-                {% endif %}
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" onclick="closeModal()">Submit</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
+
             </div>
         </div>
     </div>
