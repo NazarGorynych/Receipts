@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, connection
 from receipts.models import Receipt, User
 from django.contrib.postgres.fields import ArrayField
 
@@ -23,7 +23,6 @@ class OrderingPreference(models.Model):
             difference = [value for value in all_receipts_ids if value not in self.receipts]
             self.receipts += difference
 
-
     def retrieve_receipts_by_id(self):
         '''
         Returns list of receipt models from a list of associated IDs,
@@ -32,7 +31,10 @@ class OrderingPreference(models.Model):
         self.save()
         receipts_models = []
         if self.receipts:
-            receipts_models = [Receipt.objects.get(pk=obj_id) for obj_id in self.receipts]
+            # makes one query where it filters
+            receipts_models = Receipt.objects.filter(pk__in=self.receipts)
+            print(receipts_models)
+            print(connection.queries)
         return receipts_models
 
     def save(self, *args, **kwargs):
