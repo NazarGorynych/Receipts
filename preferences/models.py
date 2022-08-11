@@ -31,10 +31,7 @@ class OrderingPreference(models.Model):
         self.save()
         receipts_models = []
         if self.receipts:
-            # makes one query where it filters
-            receipts_models = Receipt.objects.filter(pk__in=self.receipts)
-            print(receipts_models)
-            print(connection.queries)
+            receipts_models = [Receipt.objects.get(pk=obj_id) for obj_id in self.receipts]
         return receipts_models
 
     def save(self, *args, **kwargs):
