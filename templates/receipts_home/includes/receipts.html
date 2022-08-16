@@ -3,21 +3,21 @@
     <form class="sortable list-group" hx-trigger="end" hx-post="{% url 'sort' %}" hx-target="#receipt-list">
         {% for receipt in receipts %}
             <div class="bg-light">
-                <input type="hidden" name="receipt_order" value="{{ receipt.pk }}"/>
+                <input type="hidden" name="receipt_order" value="{{ receipt.receipt.pk }}"/>
                 <li class="list-group-item" style="background-color: lightgray">
                     <a hx-target="#receipt-list">
-                        {{ forloop.counter }} &nbsp;&nbsp;{{ receipt.title }}
+                        {{ receipt.order }} &nbsp;&nbsp;{{ receipt.receipt.title }}
                     </a>
                     {% if user.is_staff %}
                         <span class="badge badge-danger badge-pill "
                               style="cursor: pointer; float: right"
-                              hx-delete="{% url 'delete-receipt' receipt.pk %}"
+                              hx-delete="{% url 'delete-receipt' receipt.receipt.pk %}"
                               hx-target="#receipt-list"
                               hx-confirm="Are you sure you wish to delete?">X</span>
                         <span class="bi bi-pen px-2"
                               style="float: right; margin: -2px">
                             <a
-                                    hx-get="{% url 'update-receipt' receipt.pk %}"
+                                    hx-get="{% url 'update-receipt' receipt.receipt.pk %}"
                                     hx-target="#receipt-list"
                                     hx-trigger="click"
                                     _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop">
